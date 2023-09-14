@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Chat</title>
+  </head>
+  <body>
+    <div id="chat">
+      <ul id="messages"></ul>
+      <div style="display: flex; flex-direction: column" id="card">
+        <div>
+          <label for="messageInput">Message</label>
+          <input id="messageInput" autocomplete="off" />
+        </div>
+
+        <div>
+          <label for="inputName"> Name :</label>
+          <input id="inputName" autocomplete="off" />
+        </div>
+      </div>
+
+      <button id="send">Send</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      document.getElementById("send").addEventListener("click", () => {
+        const message = document.getElementById("messageInput").value;
+        const name = document.getElementById("inputName").value;
+        socket.emit("chat message", message);
+        socket.emit("chat message", name);
+        document.getElementById("messageInput").value = "";
+        document.getElementById("inputName").value = "";
+      });
+
+      socket.on("chat message", (message) => {
+        const ul = document.getElementById("messages");
+
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(message));
+        ul.appendChild(li);
+      });
+    </script>
+  </body>
+</html>
