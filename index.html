@@ -4,23 +4,84 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple Chat</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      #chat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      #card {
+        background-color: #f7f7f7;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        width: 300px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      #card label {
+        font-weight: bold;
+      }
+
+      #messageInput,
+      #inputName {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      #send {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      #send:hover {
+        background-color: #0056b3;
+      }
+
+      #messages {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #messages li {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        padding: 10px;
+      }
+    </style>
   </head>
   <body>
     <div id="chat">
-      <ul id="messages"></ul>
-      <div style="display: flex; flex-direction: column" id="card">
+      <div id="card">
         <div>
-          <label for="messageInput">Message</label>
-          <input id="messageInput" autocomplete="off" />
-        </div>
-
-        <div>
-          <label for="inputName"> Name :</label>
+          <label for="inputName">Name:</label>
           <input id="inputName" autocomplete="off" />
         </div>
+        <div>
+          <label for="messageInput">Message:</label>
+          <input id="messageInput" autocomplete="off" />
+        </div>
       </div>
-
       <button id="send">Send</button>
+
+      <ul id="messages"></ul>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -30,8 +91,7 @@
       document.getElementById("send").addEventListener("click", () => {
         const message = document.getElementById("messageInput").value;
         const name = document.getElementById("inputName").value;
-        socket.emit("chat message", message);
-        socket.emit("chat message", name);
+        socket.emit("chat message", `${name}: ${message}`);
         document.getElementById("messageInput").value = "";
         document.getElementById("inputName").value = "";
       });
